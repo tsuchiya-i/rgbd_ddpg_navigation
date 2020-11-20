@@ -1,0 +1,16 @@
+<launch>
+
+	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find ddpg_rgbd)/config/ddpg.rviz"/>
+
+	<node pkg="ddpg_rgbd" type="observe_publisher.py" name="observe_publisher" output="screen"/>
+
+	<include file="$(find realsense2_camera)/launch/rs_aligned_depth.launch" />
+	<include file="$(find rtabmap_ros)/launch/rtabmap.launch" >
+		<arg name="rtabmap_args" value="--delete_db_on_start"/>
+		<arg name="depth_topic" value="/camera/aligned_depth_to_color/image_raw"/>
+		<arg name="rgb_topic" value="/camera/color/image_raw"/>
+		<arg name="camera_info_topic" value="/camera/color/camera_info"/>
+	</include>
+	<include file="$(find icart_navigation)/launch/waypoint_recorder.launch" />
+
+</launch>
